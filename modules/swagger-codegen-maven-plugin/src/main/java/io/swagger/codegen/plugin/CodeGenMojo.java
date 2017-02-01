@@ -163,6 +163,12 @@ public class CodeGenMojo extends AbstractMojo {
     private String modelNameSuffix;
 
     /**
+     * Sets an optional ignoreFileOverride path
+     */
+    @Parameter(name = "ignoreFileOverride", required = false)
+    private String ignoreFileOverride;
+
+    /**
      * A map of language-specific parameters as passed with the -c option to the command line
      */
     @Parameter(name = "configOptions")
@@ -214,6 +220,10 @@ public class CodeGenMojo extends AbstractMojo {
 
         if(isNotEmpty(gitRepoId)) {
             configurator.setGitRepoId(gitRepoId);
+        }
+
+        if(isNotEmpty(ignoreFileOverride)) {
+            configurator.setIgnoreFileOverride(ignoreFileOverride);
         }
 
         configurator.setLang(language);
@@ -335,7 +345,7 @@ public class CodeGenMojo extends AbstractMojo {
         }
 
         if (addCompileSourceRoot) {
-            final Object sourceFolderObject = configOptions.get(CodegenConstants.SOURCE_FOLDER);
+            final Object sourceFolderObject = configOptions == null ? null : configOptions.get(CodegenConstants.SOURCE_FOLDER);
             final String sourceFolder =  sourceFolderObject == null ? "src/main/java" : sourceFolderObject.toString();
 
             String sourceJavaFolder = output.toString() + "/" + sourceFolder;
